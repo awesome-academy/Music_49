@@ -1,8 +1,7 @@
-package com.framgia.music_49.Data.Source.Remote;
+package com.framgia.music_49.data.source.remote;
 
 import android.os.AsyncTask;
-import com.framgia.music_49.Data.Model.Song;
-import com.framgia.music_49.Data.Repository.SongRepository;
+import com.framgia.music_49.data.model.Song;
 import java.io.BufferedReader;
 import java.io.InputStream;
 import java.io.InputStreamReader;
@@ -13,14 +12,17 @@ import java.util.List;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
-import static com.framgia.music_49.Utils.Constant.CLIENT_ID;
+import static com.framgia.music_49.utils.Constant.CLIENT_ID;
 
-public class FetchDataRemote extends AsyncTask<String, Void, List<Song>>
-        implements SongRepository.SongRemote {
+public class GetJsonFromUrl extends AsyncTask<String, Void, List<Song>> {
     private static final String COLLECTION = "collection";
     private static final String GET = "GET";
-    private DataRemote mDataRemote;
+    private OnCallBackDataListener mOnCallBackDataListener;
     private List<Song> mSongs = new ArrayList<>();
+
+    public GetJsonFromUrl(OnCallBackDataListener onCallBackDataListener) {
+        mOnCallBackDataListener = onCallBackDataListener;
+    }
 
     @Override
     protected List<Song> doInBackground(String... strings) {
@@ -69,9 +71,5 @@ public class FetchDataRemote extends AsyncTask<String, Void, List<Song>>
     @Override
     protected void onPostExecute(List<Song> songList) {
         super.onPostExecute(songList);
-    }
-
-    @Override
-    public void getSongRemote(DataRemote dataRemote) {
     }
 }
