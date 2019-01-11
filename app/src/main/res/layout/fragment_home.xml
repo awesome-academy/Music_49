@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.constraint.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/bg_color"
+    >
+    <TextView
+        android:id="@+id/textViewNewAndHot"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="@string/new_and_hot"
+        android:textColor="@color/white"
+        android:textSize="@dimen/dp_16"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        />
+    <android.support.v7.widget.RecyclerView
+        android:id="@+id/recyclerViewNewAndHot"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        app:layoutManager="android.support.v7.widget.LinearLayoutManager"
+        app:layout_constraintTop_toBottomOf="@+id/textViewNewAndHot"
+        />
+    <TextView
+        android:id="@+id/textViewGenre"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="@string/genre"
+        android:textColor="@color/white"
+        android:textSize="@dimen/dp_16"
+        app:layout_constraintTop_toBottomOf="@+id/recyclerViewNewAndHot"
+        />
+    <android.support.v7.widget.RecyclerView
+        android:id="@+id/recyclerViewGenre"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:orientation="vertical"
+        app:layoutManager="android.support.v7.widget.LinearLayoutManager"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/textViewGenre"
+        />
+</android.support.constraint.ConstraintLayout>

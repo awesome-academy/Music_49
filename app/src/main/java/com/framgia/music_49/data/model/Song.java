@@ -1,7 +1,4 @@
-package com.framgia.music_49.Data.Model;
-
-import android.os.Parcel;
-import android.os.Parcelable;
+package com.framgia.music_49.data.model;
 
 public class Song {
     private String mNameSong;
