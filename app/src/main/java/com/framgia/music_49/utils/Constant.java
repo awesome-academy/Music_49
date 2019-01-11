@@ -1,4 +1,4 @@
-package com.framgia.music_49.Utils;
+package com.framgia.music_49.utils;
 
 import com.framgia_music_49.BuildConfig;
 

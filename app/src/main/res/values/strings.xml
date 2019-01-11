@@ -1,3 +1,11 @@
 <resources>
-    <string name="app_name">RepositoryTest</string>
+    <string name="app_name">Bottom Navigation</string>
+    <string name="home">Home</string>
+    <string name="audio">Audio</string>
+    <string name="search">Search</string>
+    <string name="library">Library</string>
+    <string name="songname">NameSong</string>
+    <string name="new_and_hot">New And Hot</string>
+    <string name="genre">Genre</string>
+    <string name="artics_name">Artics Name</string>
 </resources>
