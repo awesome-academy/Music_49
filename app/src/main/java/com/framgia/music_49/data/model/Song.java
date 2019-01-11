@@ -17,6 +17,54 @@ public class Song {
         mDownloadLink = builder.mDownloadLink;
     }
 
+    public String getNameSong() {
+        return mNameSong;
+    }
+
+    public void setNameSong(String nameSong) {
+        mNameSong = nameSong;
+    }
+
+    public String getNameArtist() {
+        return mNameArtist;
+    }
+
+    public void setNameArtist(String nameArtist) {
+        mNameArtist = nameArtist;
+    }
+
+    public String getImageSong() {
+        return mImageSong;
+    }
+
+    public void setImageSong(String imageSong) {
+        mImageSong = imageSong;
+    }
+
+    public String getLink() {
+        return mLink;
+    }
+
+    public void setLink(String link) {
+        mLink = link;
+    }
+
+    public String getDuration() {
+        return mDuration;
+    }
+
+    public void setDuration(String duration) {
+        mDuration = duration;
+    }
+
+    public String getDownloadLink() {
+        return mDownloadLink;
+    }
+
+    public void setDownloadLink(String downloadLink) {
+        mDownloadLink = downloadLink;
+    }
+
     public static class Builder {
 
         public Builder() {

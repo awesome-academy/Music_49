@@ -5,13 +5,19 @@ import android.support.design.widget.BottomNavigationView;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
+import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.MenuItem;
+import android.widget.Toast;
+import com.framgia.music_49.screen.fragmentHome.FragmentHome;
+import com.framgia.music_49.utils.MoveFragment;
 import com.framgia_music_49.R;
 
 public class MainActivity extends AppCompatActivity
         implements BottomNavigationView.OnNavigationItemSelectedListener {
+    private ActionBar mActionBar;
+    private MoveFragment mMoveFragment;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -21,29 +27,36 @@ public class MainActivity extends AppCompatActivity
     }
 
     private void initView() {
-        BottomNavigationView navigation = findViewById(R.id.navigationMain);
-        navigation.setOnNavigationItemSelectedListener(this);
+        mActionBar = getSupportActionBar();
+        mMoveFragment = new MoveFragment();
+        assert mActionBar != null;
+        mActionBar.hide();
+        mMoveFragment.addFragment(MainActivity.this, FragmentHome.newInstance(),
+                R.id.frameContainer);
+        BottomNavigationView bottomNavigationView = findViewById(R.id.navigationMain);
+        bottomNavigationView.setOnNavigationItemSelectedListener(this);
     }
 
-    private void addFragment(Fragment fragment) {
-        FragmentManager fragmentManager = getSupportFragmentManager();
-        FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
-        fragmentTransaction.add(R.id.frameContainer, fragment);
-        fragmentTransaction.commit();
-    }
-
-    //TODO move fragments
     @Override
     public boolean onNavigationItemSelected(@NonNull MenuItem item) {
         switch (item.getItemId()) {
             case R.id.navigationHome:
-                break;
+                mActionBar.setTitle(R.string.home);
+                mMoveFragment.addFragment(MainActivity.this, FragmentHome.newInstance(),
+                        R.id.frameContainer);
+                return true;
             case R.id.navigationAudio:
-                break;
+                mActionBar.setTitle(R.string.audio);
+                //add fragment audio
+                return true;
             case R.id.navigationSearch:
-                break;
+                mActionBar.setTitle(R.string.search);
+                //add fragment search
+                return true;
             case R.id.navigationLibrary:
-                break;
+                mActionBar.setTitle(R.string.library);
+                //add fragment library
+                return true;
         }
         return false;
     }

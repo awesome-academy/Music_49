@@ -10,19 +10,26 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Toast;
 import com.framgia.music_49.data.model.Genre;
+import com.framgia.music_49.data.model.Song;
+import com.framgia.music_49.data.repository.SongRepository;
+import com.framgia.music_49.data.source.remote.SongRemoteDataSource;
 import com.framgia.music_49.utils.Genres;
 import com.framgia.music_49.utils.ItemClickListener;
 import com.framgia_music_49.R;
 import java.util.ArrayList;
 import java.util.List;
 
-public class FragmentHome extends Fragment implements ItemClickListener {
+public class FragmentHome extends Fragment implements ItemClickListener, HomeContract.View {
+    private List<Song> mSongs = new ArrayList<>();
+    private AdapterSongNewAndHot mAdapterSongNewAndHot;
+
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container,
             @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_home, container, false);
         initView(view);
+        initPresenter();
         return view;
     }
 
@@ -31,21 +38,23 @@ public class FragmentHome extends Fragment implements ItemClickListener {
         RecyclerView recyclerViewGenre = view.findViewById(R.id.recyclerViewGenre);
         recyclerViewGenre.setHasFixedSize(true);
         recyclerViewGenre.setAdapter(homeAdapter);
-//        AdapterNewAndHot adapterNewAndHot = new AdapterNewAndHot(getNewAndHotList(), getContext());
+        mAdapterSongNewAndHot = new AdapterSongNewAndHot(mSongs, getContext());
         RecyclerView recyclerViewNewAndHot = view.findViewById(R.id.recyclerViewNewAndHot);
         recyclerViewNewAndHot.setHasFixedSize(true);
-//        recyclerViewNewAndHot.setAdapter(adapterNewAndHot);
+        recyclerViewNewAndHot.setAdapter(mAdapterSongNewAndHot);
     }
 
-//    private List<NewAndHot> getNewAndHotList() {
-//        List<NewAndHot> newAndHots = new ArrayList<>();
-//        newAndHots.add(new NewAndHot(R.drawable.music, "Phải Không Em", "Duy Bằng"));
-//        newAndHots.add(new NewAndHot(R.drawable.rock, "Fire way", "Duy Bằng"));
-//        newAndHots.add(new NewAndHot(R.drawable.ambient, "Ngọn lửa cao nguyên", "Alient"));
-//        newAndHots.add(new NewAndHot(R.drawable.classical, "Line Way", "Luma"));
-//        newAndHots.add(new NewAndHot(R.drawable.country, "Về quê", "Cao Hùng"));
-//        return newAndHots;
-//    }
+    private void initPresenter() {
+        SongRemoteDataSource songRemoteDataSource = new SongRemoteDataSource();
+        SongRepository songRepository = SongRepository.getmInStance(songRemoteDataSource);
+        PresenterFragmentHome presenterFragmentHome = new PresenterFragmentHome(songRepository);
+        presenterFragmentHome.getSongListWithGenre(Genres.ALTERNATIVE_ROCK);
+        presenterFragmentHome.setView(this);
+    }
+
+    public static FragmentHome newInstance() {
+        return new FragmentHome();
+    }
 
     private List<Genre> getGenreList() {
         List<Genre> genreList = new ArrayList<>();
@@ -61,20 +70,31 @@ public class FragmentHome extends Fragment implements ItemClickListener {
     public void onItemClicked(int position) {
         switch (position) {
             case Genres.GENRE_MUSIC:
-                Toast.makeText(getActivity(), "music", Toast.LENGTH_SHORT).show();
+                //move fragment listmusic by genre: all-music
                 break;
             case Genres.GENRE_ALTERNATIVE_ROCK:
-                Toast.makeText(getActivity(), "GENRE_ALTERNATIVE_ROCK", Toast.LENGTH_SHORT).show();
+                //move fragment listmusic by genre: ALTERNATIVE_ROCK
                 break;
             case Genres.GENRE_AMBIENT:
-                Toast.makeText(getActivity(), "GENRE_AMBIENT", Toast.LENGTH_SHORT).show();
+                //move fragment listmusic by genre: AMBIENT
                 break;
             case Genres.GENRE_CLASSICAL:
-                Toast.makeText(getActivity(), "GENRE_CLASSICAL", Toast.LENGTH_SHORT).show();
+                //move fragment listmusic by genre: CLASSICAL
                 break;
             case Genres.GENRE_COUNTRY:
-                Toast.makeText(getActivity(), "GENRE_COUNTRY", Toast.LENGTH_SHORT).show();
+                //move fragment listmusic by genre: COUNTRY
                 break;
         }
+    }
+
+    @Override
+    public void onSuccessData(List<Song> songs) {
+        mSongs.addAll(songs);
+        mAdapterSongNewAndHot.notifyDataSetChanged();
+    }
+
+    @Override
+    public void onFailData(Exception e) {
+        Toast.makeText(getActivity(), e.getMessage(), Toast.LENGTH_SHORT).show();
     }
 }

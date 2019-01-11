@@ -2,7 +2,6 @@ package com.framgia.music_49.data.source.remote;
 
 import android.os.AsyncTask;
 import com.framgia.music_49.data.model.Song;
-import com.framgia.music_49.data.source.SongDataSource;
 import java.io.BufferedReader;
 import java.io.InputStream;
 import java.io.InputStreamReader;
@@ -15,12 +14,15 @@ import org.json.JSONObject;
 
 import static com.framgia.music_49.utils.Constant.CLIENT_ID;
 
-public class FetchDataRemote extends AsyncTask<String, Void, List<Song>>
-        implements SongDataSource.RemoteDataSource {
+public class GetJsonFromUrl extends AsyncTask<String, Void, List<Song>> {
     private static final String COLLECTION = "collection";
     private static final String GET = "GET";
     private SongRemoteDataCallBack mSongRemoteDataCallBack;
     private List<Song> mSongs = new ArrayList<>();
+
+    public GetJsonFromUrl(SongRemoteDataCallBack songRemoteDataCallBack) {
+        mSongRemoteDataCallBack = songRemoteDataCallBack;
+    }
 
     @Override
     protected List<Song> doInBackground(String... strings) {
@@ -28,6 +30,7 @@ public class FetchDataRemote extends AsyncTask<String, Void, List<Song>>
             String data = getDataFromUrl(strings[0]);
             mSongs = pareJsonToObject(data);
         } catch (Exception e) {
+            mSongRemoteDataCallBack.getDataRemoteFail(e);
             e.printStackTrace();
         }
         return mSongs;
@@ -56,8 +59,8 @@ public class FetchDataRemote extends AsyncTask<String, Void, List<Song>>
                     new Song.Builder().setNameSong(jsonObject.getString(Song.JsonEntity.NAME_SONG))
                             .setNameArtist(jsonObject.getString(Song.JsonEntity.NAME_ARTIST))
                             .setImageSong(
-                                    jsonObject.getString(Song.JsonEntity.URL_STREAM) + CLIENT_ID)
-                            .setLink(jsonObject.getString(Song.JsonEntity.URL_STREAM))
+                                    jsonObject.getString(Song.JsonEntity.URL_IMAGE))
+                            .setLink(jsonObject.getString(Song.JsonEntity.URL_STREAM)+CLIENT_ID)
                             .setDuration(jsonObject.getString(Song.JsonEntity.DURATION))
                             .setDownloadLink(jsonObject.getString(Song.JsonEntity.URL_DOWNLOAD))
                             .build();
@@ -69,10 +72,6 @@ public class FetchDataRemote extends AsyncTask<String, Void, List<Song>>
     @Override
     protected void onPostExecute(List<Song> songList) {
         super.onPostExecute(songList);
-    }
-
-    @Override
-    public void getListSongByGenres(String genre, SongRemoteDataCallBack listener) {
-
+        mSongRemoteDataCallBack.getDataRemoteSuccess(songList);
     }
 }

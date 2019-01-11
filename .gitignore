@@ -46,7 +46,6 @@ proguard/
 captures/
 
 # IntelliJ
-*.iml
 /.idea/
 .idea/workspace.xml
 .idea/tasks.xml
@@ -62,7 +61,6 @@ app/src/androidTest/java/com/example/framgia/framgia_music_49/ExampleInstrumente
 #*.keystore
 
 # External native build folder generated in Android Studio 2.2 and later
-.externalNativeBuild
 
 # Google Services (e.g. APIs or Firebase)
 # google-services.json
@@ -82,3 +80,4 @@ fastlane/readme.md
 # Version control
 vcs.xml
 app/libs/
+/app/src/main/res/layout/activity_main.xml

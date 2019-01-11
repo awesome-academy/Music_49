@@ -8,7 +8,6 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import com.bumptech.glide.Glide;
-
 import com.framgia.music_49.data.model.Genre;
 import com.framgia.music_49.utils.ItemClickListener;
 import com.framgia_music_49.R;
