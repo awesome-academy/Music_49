@@ -1,17 +1,17 @@
 package com.framgia.music_49.screen;
 
+import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.design.widget.BottomNavigationView;
-import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentManager;
-import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.AppCompatActivity;
-import android.os.Bundle;
 import android.view.MenuItem;
+import com.framgia.music_49.screen.home.HomeFragment;
+import com.framgia.music_49.utils.Navigator;
 import com.framgia_music_49.R;
 
 public class MainActivity extends AppCompatActivity
         implements BottomNavigationView.OnNavigationItemSelectedListener {
+    private Navigator mNavigator;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -21,25 +21,33 @@ public class MainActivity extends AppCompatActivity
     }
 
     private void initView() {
-        BottomNavigationView navigation = findViewById(R.id.navigationMain);
-        navigation.setOnNavigationItemSelectedListener(this);
+        BottomNavigationView bottomNavigationView = findViewById(R.id.navigationMain);
+        mNavigator = new Navigator();
+        getSupportActionBar().setTitle(R.string.home);
+        bottomNavigationView.setOnNavigationItemSelectedListener(this);
+        mNavigator.addFragment(MainActivity.this, HomeFragment.newInstance(), R.id.frameContainer);
     }
 
     @Override
     public boolean onNavigationItemSelected(@NonNull MenuItem item) {
         switch (item.getItemId()) {
             case R.id.navigationHome:
-                //add fragment home
-                break;
+                getSupportActionBar().setTitle(R.string.home);
+                mNavigator.addFragment(MainActivity.this, HomeFragment.newInstance(),
+                        R.id.frameContainer);
+                return true;
             case R.id.navigationAudio:
+                getSupportActionBar().setTitle(R.string.audio);
                 //add fragment audio
-                break;
+                return true;
             case R.id.navigationSearch:
+                getSupportActionBar().setTitle(R.string.search);
                 //add fragment search
-                break;
+                return true;
             case R.id.navigationLibrary:
+                getSupportActionBar().setTitle(R.string.library);
                 //add fragment library
-                break;
+                return true;
         }
         return false;
     }
