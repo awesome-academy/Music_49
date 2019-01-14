@@ -17,11 +17,11 @@ import static com.framgia.music_49.utils.Constant.CLIENT_ID;
 public class GetJsonFromUrl extends AsyncTask<String, Void, List<Song>> {
     private static final String COLLECTION = "collection";
     private static final String GET = "GET";
-    private OnCallBackDataListener mOnCallBackDataListener;
+    private SongRemoteDataCallBack mSongRemoteDataCallBack;
     private List<Song> mSongs = new ArrayList<>();
 
-    public GetJsonFromUrl(OnCallBackDataListener onCallBackDataListener) {
-        mOnCallBackDataListener = onCallBackDataListener;
+    public GetJsonFromUrl(SongRemoteDataCallBack songRemoteDataCallBack) {
+        mSongRemoteDataCallBack = songRemoteDataCallBack;
     }
 
     @Override
@@ -57,9 +57,8 @@ public class GetJsonFromUrl extends AsyncTask<String, Void, List<Song>> {
             Song song =
                     new Song.Builder().setNameSong(jsonObject.getString(Song.JsonEntity.NAME_SONG))
                             .setNameArtist(jsonObject.getString(Song.JsonEntity.NAME_ARTIST))
-                            .setImageSong(
-                                    jsonObject.getString(Song.JsonEntity.URL_STREAM) + CLIENT_ID)
-                            .setLink(jsonObject.getString(Song.JsonEntity.URL_STREAM))
+                            .setImageSong(jsonObject.getString(Song.JsonEntity.URL_IMAGE))
+                            .setLink(jsonObject.getString(Song.JsonEntity.URL_STREAM) + CLIENT_ID)
                             .setDuration(jsonObject.getString(Song.JsonEntity.DURATION))
                             .setDownloadLink(jsonObject.getString(Song.JsonEntity.URL_DOWNLOAD))
                             .build();
@@ -71,5 +70,6 @@ public class GetJsonFromUrl extends AsyncTask<String, Void, List<Song>> {
     @Override
     protected void onPostExecute(List<Song> songList) {
         super.onPostExecute(songList);
+        mSongRemoteDataCallBack.getDataRemoteSuccess(songList);
     }
 }

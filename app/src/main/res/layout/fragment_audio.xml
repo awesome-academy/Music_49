@@ -2,46 +2,42 @@
 <android.support.constraint.ConstraintLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/bg_color"
     >
     <TextView
-        android:id="@+id/textViewNewAndHot"
+        android:id="@+id/textViewAudioGenre"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="@string/new_and_hot"
+        android:text="Genres"
         android:textColor="@color/white"
         android:textSize="@dimen/dp_16"
-        app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        tools:ignore="SpUsage"
         />
     <android.support.v7.widget.RecyclerView
-        android:id="@+id/recyclerViewNewAndHot"
+        android:id="@+id/recyclerViewAudioGenre"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
         app:layoutManager="android.support.v7.widget.LinearLayoutManager"
-        app:layout_constraintTop_toBottomOf="@+id/textViewNewAndHot"
+        app:layout_constraintTop_toBottomOf="@+id/textViewAudioGenre"
         />
     <TextView
-        android:id="@+id/textViewGenre"
+        android:id="@+id/textViewListMusicAudio"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="@string/genre"
+        android:text="List Music"
         android:textColor="@color/white"
-        android:textSize="@dimen/dp_16"
-        app:layout_constraintTop_toBottomOf="@+id/recyclerViewNewAndHot"
-        tools:ignore="SpUsage"
+        app:layout_constraintTop_toBottomOf="@+id/recyclerViewAudioGenre"
         />
     <android.support.v7.widget.RecyclerView
-        android:id="@+id/recyclerViewGenre"
+        android:id="@+id/recyclerViewAudioListMusic"
         android:layout_width="match_parent"
         android:layout_height="0dp"
+        android:orientation="vertical"
         app:layoutManager="android.support.v7.widget.LinearLayoutManager"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/textViewGenre"
+        app:layout_constraintTop_toBottomOf="@+id/textViewListMusicAudio"
         />
 </android.support.constraint.ConstraintLayout>
