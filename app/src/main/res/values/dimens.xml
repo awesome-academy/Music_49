@@ -10,4 +10,5 @@
     <dimen name="dp_120">120dp</dimen>
     <dimen name="dp_16">16dp</dimen>
     <dimen name="dp_8">8dp</dimen>
+    <dimen name="dp_300">dp_300</dimen>
 </resources>
