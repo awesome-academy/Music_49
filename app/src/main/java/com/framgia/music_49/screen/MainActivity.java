@@ -5,6 +5,7 @@ import android.support.annotation.NonNull;
 import android.support.design.widget.BottomNavigationView;
 import android.support.v7.app.AppCompatActivity;
 import android.view.MenuItem;
+import com.framgia.music_49.screen.audio.AudioFragment;
 import com.framgia.music_49.screen.home.HomeFragment;
 import com.framgia.music_49.utils.Navigator;
 import com.framgia_music_49.R;
@@ -38,7 +39,8 @@ public class MainActivity extends AppCompatActivity
                 return true;
             case R.id.navigationAudio:
                 getSupportActionBar().setTitle(R.string.audio);
-                //add fragment audio
+                mNavigator.addFragment(MainActivity.this, AudioFragment.newInstance(),
+                        R.id.frameContainer);
                 return true;
             case R.id.navigationSearch:
                 getSupportActionBar().setTitle(R.string.search);
