@@ -12,6 +12,7 @@ import android.widget.Toast;
 import com.framgia.music_49.data.model.Genre;
 import com.framgia.music_49.data.model.Song;
 import com.framgia.music_49.data.repository.SongRepository;
+import com.framgia.music_49.data.source.local.SongLocal;
 import com.framgia.music_49.data.source.remote.SongRemoteDataSource;
 import com.framgia.music_49.utils.Genres;
 import com.framgia.music_49.utils.GenresTab;
@@ -52,7 +53,8 @@ public class HomeFragment extends Fragment implements ItemClickListener, HomeCon
 
     private void initPresenter() {
         SongRemoteDataSource songRemoteDataSource = SongRemoteDataSource.getInstance();
-        SongRepository songRepository = SongRepository.getInstance(songRemoteDataSource);
+        SongLocal songLocal = SongLocal.getInstance(getActivity().getContentResolver());
+        SongRepository songRepository = SongRepository.getInstance(songRemoteDataSource, songLocal);
         HomePresenter homePresenter = new HomePresenter(songRepository);
         homePresenter.getSongListWithGenre(Genres.ALTERNATIVE_ROCK);
         homePresenter.setView(this);

@@ -12,6 +12,7 @@ import android.widget.Toast;
 import com.framgia.music_49.data.model.Genre;
 import com.framgia.music_49.data.model.Song;
 import com.framgia.music_49.data.repository.SongRepository;
+import com.framgia.music_49.data.source.local.SongLocal;
 import com.framgia.music_49.data.source.remote.SongRemoteDataSource;
 import com.framgia.music_49.utils.Genres;
 import com.framgia.music_49.utils.GenresTab;
@@ -51,7 +52,8 @@ public class AudioFragment extends Fragment implements ItemClickListener, AudioC
 
     private void initPresenter() {
         SongRemoteDataSource songRemoteDataSource = SongRemoteDataSource.getInstance();
-        SongRepository songRepository = SongRepository.getInstance(songRemoteDataSource);
+        SongLocal songLocal = SongLocal.getInstance(getActivity().getContentResolver());
+        SongRepository songRepository = SongRepository.getInstance(songRemoteDataSource, songLocal);
         AudioPresenter audioPresenter = new AudioPresenter(songRepository);
         audioPresenter.getSongsWithGenre(Genres.AUDIO);
         audioPresenter.setView(this);
