@@ -10,4 +10,5 @@
     <string name="artics_name">Artics Name</string>
     <string name="list_music">List Music</string>
     <string name="genres">Genres</string>
+    <string name="offline_trending">Offline Trending</string>
 </resources>
