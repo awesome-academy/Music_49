@@ -8,13 +8,15 @@ public class SongRepository {
     private static SongRepository sInstance;
     private SongDataSource.Remote mRemote;
     private SongDataSource.Local mLocal;
-    private SongRepository(SongDataSource.Remote songDataSource) {
-        mRemote = songDataSource;
+
+    public SongRepository(SongDataSource.Remote remote, SongDataSource.Local local) {
+        mRemote = remote;
+        mLocal = local;
     }
 
-    public static SongRepository getInstance(SongDataSource.Remote remote) {
+    public static SongRepository getInstance(SongDataSource.Remote remote,SongDataSource.Local local) {
         if (sInstance == null) {
-            sInstance = new SongRepository(remote);
+            sInstance = new SongRepository(remote,local);
         }
         return sInstance;
     }

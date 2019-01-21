@@ -7,6 +7,7 @@ public interface SongDataSource {
     interface Remote {
         void getListSongWithGenres(String genre, SongRemoteDataCallBack listener);
     }
+
     interface Local {
         void getListSongLocal(SongLocalDataCallBack listener);
     }

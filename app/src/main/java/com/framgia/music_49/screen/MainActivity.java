@@ -7,6 +7,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.view.MenuItem;
 import com.framgia.music_49.screen.audio.AudioFragment;
 import com.framgia.music_49.screen.home.HomeFragment;
+import com.framgia.music_49.screen.library.LibraryFragment;
 import com.framgia.music_49.utils.Navigator;
 import com.framgia_music_49.R;
 
@@ -48,7 +49,8 @@ public class MainActivity extends AppCompatActivity
                 return true;
             case R.id.navigationLibrary:
                 getSupportActionBar().setTitle(R.string.library);
-                //add fragment library
+                mNavigator.addFragment(MainActivity.this, LibraryFragment.newInstance(),
+                        R.id.frameContainer);
                 return true;
         }
         return false;
