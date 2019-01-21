@@ -14,9 +14,11 @@ import com.framgia.music_49.data.model.Song;
 import com.framgia.music_49.data.repository.SongRepository;
 import com.framgia.music_49.data.source.local.SongLocal;
 import com.framgia.music_49.data.source.remote.SongRemoteDataSource;
+import com.framgia.music_49.screen.listmusic.ListMusicFragment;
 import com.framgia.music_49.utils.Genres;
 import com.framgia.music_49.utils.GenresTab;
 import com.framgia.music_49.utils.ItemClickListener;
+import com.framgia.music_49.utils.Navigator;
 import com.framgia_music_49.R;
 import java.util.ArrayList;
 import java.util.List;
@@ -24,6 +26,7 @@ import java.util.List;
 public class HomeFragment extends Fragment implements ItemClickListener, HomeContract.View {
     private SongNewAndHotAdapter mSongNewAndHotAdapter;
     private List<Song> mSongs;
+    private Navigator mNavigator;
 
     public static HomeFragment newInstance() {
         return new HomeFragment();
@@ -40,6 +43,7 @@ public class HomeFragment extends Fragment implements ItemClickListener, HomeCon
     }
 
     private void initView(View view) {
+        mNavigator = new Navigator();
         mSongs = new ArrayList<>();
         RecyclerView recyclerViewGenre = view.findViewById(R.id.recyclerViewGenre);
         RecyclerView recyclerViewNewAndHot = view.findViewById(R.id.recyclerViewNewAndHot);
@@ -83,19 +87,25 @@ public class HomeFragment extends Fragment implements ItemClickListener, HomeCon
     public void onItemClicked(int position) {
         switch (position) {
             case GenresTab.GENRE_MUSIC:
-                //move fragment listmusic by genre: all-music
+                mNavigator.addFragment(getActivity(), ListMusicFragment.newInstance(Genres.MUSIC),
+                        R.id.frameContainer);
                 break;
             case GenresTab.GENRE_ALTERNATIVE_ROCK:
-                //move fragment listmusic by genre: ALTERNATIVE_ROCK
+                mNavigator.addFragment(getActivity(),
+                        ListMusicFragment.newInstance(Genres.ALTERNATIVE_ROCK),
+                        R.id.frameContainer);
                 break;
             case GenresTab.GENRE_AMBIENT:
-                //move fragment listmusic by genre: AMBIENT
+                mNavigator.addFragment(getActivity(), ListMusicFragment.newInstance(Genres.AMBIENT),
+                        R.id.frameContainer);
                 break;
             case GenresTab.GENRE_CLASSICAL:
-                //move fragment listmusic by genre: CLASSICAL
+                mNavigator.addFragment(getActivity(),
+                        ListMusicFragment.newInstance(Genres.CLASSICAL), R.id.frameContainer);
                 break;
             case GenresTab.GENRE_COUNTRY:
-                //move fragment listmusic by genre: COUNTRY
+                mNavigator.addFragment(getActivity(), ListMusicFragment.newInstance(Genres.COUNTRY),
+                        R.id.frameContainer);
                 break;
         }
     }
