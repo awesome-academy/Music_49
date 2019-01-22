@@ -33,13 +33,10 @@ public class ServicePlaySong extends Service implements MediaPlayer.OnPreparedLi
     public void setDataMusic() {
         mMediaPlayer.reset();
         try {
-            mMediaPlayer.reset();
             mMediaPlayer.setDataSource(mSongs.get(mPosition).getLink());
             mMediaPlayer.setAudioStreamType(AudioManager.STREAM_MUSIC);
             mMediaPlayer.setOnPreparedListener(this);
             mMediaPlayer.prepareAsync();
-            Toast.makeText(getApplicationContext(), mSongs.get(mPosition).getNameSong() + "",
-                    Toast.LENGTH_SHORT).show();
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -87,11 +84,6 @@ public class ServicePlaySong extends Service implements MediaPlayer.OnPreparedLi
         mp.start();
     }
 
-    public class ServicePlay extends Binder {
-        public ServicePlaySong getService() {
-            return ServicePlaySong.this;
-        }
-    }
     public void downLoad() {
         DownloadManager downloadManager =
                 (DownloadManager) this.getSystemService(Context.DOWNLOAD_SERVICE);
@@ -107,6 +99,12 @@ public class ServicePlaySong extends Service implements MediaPlayer.OnPreparedLi
             downloadManager.enqueue(request);
         } else {
             Toast.makeText(this, R.string.link_error, Toast.LENGTH_SHORT).show();
+        }
+    }
+
+    public class ServicePlay extends Binder {
+        public ServicePlaySong getService() {
+            return ServicePlaySong.this;
         }
     }
 }
