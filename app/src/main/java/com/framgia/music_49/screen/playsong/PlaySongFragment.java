@@ -3,7 +3,9 @@ package com.framgia.music_49.screen.playsong;
 import android.content.ComponentName;
 import android.content.Intent;
 import android.content.ServiceConnection;
+import android.media.MediaPlayer;
 import android.os.Bundle;
+import android.os.Handler;
 import android.os.IBinder;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -13,6 +15,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageButton;
 import android.widget.ImageView;
+import android.widget.SeekBar;
 import android.widget.TextView;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.RequestOptions;
@@ -21,20 +24,40 @@ import com.framgia.music_49.screen.service.ServicePlaySong;
 import com.framgia_music_49.R;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Locale;
+import java.util.Random;
+import java.util.concurrent.TimeUnit;
 
 import static android.content.Context.BIND_AUTO_CREATE;
 import static com.framgia.music_49.utils.Constant.ONE;
+import static com.framgia.music_49.utils.OptionLoopShuffle.NON_SHUFFLE;
+import static com.framgia.music_49.utils.OptionLoopShuffle.SHUFFLE;
 
-public class PlaySongFragment extends Fragment implements View.OnClickListener {
+public class PlaySongFragment extends Fragment
+        implements View.OnClickListener, MediaPlayer.OnCompletionListener {
     private static final String BUNDLE_POSITION = "BUNDLE_POSITION";
     private static final String BUNDLE_LIST = "BUNDLE_LIST";
     private static ServicePlaySong sServicePlaySong;
     private int mPosition;
     private ImageView mImageViewPlaySong;
     private ImageButton mImageButtonPause;
+    private ImageButton mImageButtonRandom;
+    private ImageButton mImageButtonBack;
     private TextView mTextViewNameSongPlaySong;
     private TextView mTextViewNameArticsPlaySong;
+    private TextView mTextViewTimeProgress;
+    private TextView mTextViewTimeTotal;
+    private SeekBar mSeekBar;
+
+    private ImageView mImageViewMini;
+    private TextView mTextViewNameSongMini;
+    private TextView mTextViewNameArticsMini;
+    private ImageButton mImageButtonPauseMini;
+
     private List<Song> mSongs;
+    private int mIsShuffle = NON_SHUFFLE;
+    private Random mRandom = new Random();
+    private MediaPlayer mMediaPlayer;
     private boolean mIsBoundService;
     private ServiceConnection mServiceConnection = new ServiceConnection() {
         @Override
@@ -43,6 +66,7 @@ public class PlaySongFragment extends Fragment implements View.OnClickListener {
             sServicePlaySong = binder.getService();
             mIsBoundService = true;
             setServiceConnection();
+            setTimeProgress();
         }
 
         @Override
@@ -64,9 +88,10 @@ public class PlaySongFragment extends Fragment implements View.OnClickListener {
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container,
             @Nullable Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.fragment_play_song, container, false);
+        View view = inflater.inflate(R.layout.fragment_content_music, container, false);
         initData();
         intView(view);
+        setUIPlaySongMini();
         startBoundService();
         return view;
     }
@@ -83,13 +108,29 @@ public class PlaySongFragment extends Fragment implements View.OnClickListener {
     private void intView(View view) {
         mTextViewNameSongPlaySong = view.findViewById(R.id.textViewNameSongPlayMusic);
         mTextViewNameArticsPlaySong = view.findViewById(R.id.textViewNameArticsPlayMusic);
+        mTextViewTimeProgress = view.findViewById(R.id.textViewTimeProgressPlayMusic);
+        mTextViewTimeTotal = view.findViewById(R.id.textViewTimeTotalPlayMusic);
+        mTextViewNameSongMini = view.findViewById(R.id.textViewNameSongPlayMusicMini);
+        mTextViewNameArticsMini = view.findViewById(R.id.textViewNameArticsPlayMusicMini);
+        mImageButtonPauseMini = view.findViewById(R.id.imageButtonPausePlayMusicMini);
         mImageButtonPause = view.findViewById(R.id.imageButtonPausePlayMusic);
+        mImageButtonRandom = view.findViewById(R.id.imageButtonRandomPlayMusic);
+        mSeekBar = view.findViewById(R.id.seekbarPlaySong);
+
+        view.findViewById(R.id.imageButtonBackPlayMusic).setOnClickListener(this);
         view.findViewById(R.id.imageButtonDownloadPlayMusic).setOnClickListener(this);
         view.findViewById(R.id.imageButtonPreviousPlayMusic).setOnClickListener(this);
         view.findViewById(R.id.imageButtonPausePlayMusic).setOnClickListener(this);
         view.findViewById(R.id.imageButtonNextPlayMusic).setOnClickListener(this);
+        view.findViewById(R.id.imageButtonRepeatPlayMusic).setOnClickListener(this);
+        view.findViewById(R.id.imageButtonRandomPlayMusic).setOnClickListener(this);
+        view.findViewById(R.id.imageButtonPreviousPlayMusicMini).setOnClickListener(this);
+        view.findViewById(R.id.imageButtonNextPlayMusicMini).setOnClickListener(this);
+
         mImageViewPlaySong = view.findViewById(R.id.imageViewSongPlayMusic);
+        mImageViewMini = view.findViewById(R.id.imageViewSongPlayMusicMini);
         mImageButtonPause.setOnClickListener(this);
+        mImageButtonPauseMini.setOnClickListener(this);
     }
 
     private void startBoundService() {
@@ -106,7 +147,28 @@ public class PlaySongFragment extends Fragment implements View.OnClickListener {
         mIsBoundService = true;
     }
 
+    private void setSeekBarPlaySong() {
+        mSeekBar.setMax(mMediaPlayer.getDuration());
+        mSeekBar.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
+            @Override
+            public void onProgressChanged(SeekBar seekBar, int progress, boolean input) {
+                if (input) {
+                    mMediaPlayer.seekTo(progress);
+                }
+            }
+
+            @Override
+            public void onStartTrackingTouch(SeekBar seekBar) {
+            }
+
+            @Override
+            public void onStopTrackingTouch(SeekBar seekBar) {
+            }
+        });
+    }
+
     private void setUIPlaySong() {
+        mMediaPlayer = sServicePlaySong.getMediaPlayer();
         if (getActivity() != null) {
             mTextViewNameSongPlaySong.setText(mSongs.get(mPosition).getNameSong());
             mTextViewNameArticsPlaySong.setText(mSongs.get(mPosition).getNameArtist());
@@ -117,9 +179,43 @@ public class PlaySongFragment extends Fragment implements View.OnClickListener {
         }
     }
 
+    private void setUIPlaySongMini() {
+        mTextViewNameSongMini.setText(mSongs.get(mPosition).getNameSong());
+        mTextViewNameArticsMini.setText(mSongs.get(mPosition).getNameArtist());
+        Glide.with(getActivity())
+                .load(mSongs.get(mPosition).getImageSong())
+                .apply(new RequestOptions().placeholder(R.drawable.ambient))
+                .into(mImageViewMini);
+    }
+
+    private String parseDurationToStringTime(long duration) {
+        return String.format(Locale.getDefault(), "%02d:%02d",
+                TimeUnit.MILLISECONDS.toMinutes(duration),
+                TimeUnit.MILLISECONDS.toSeconds(duration) - TimeUnit.MINUTES.toSeconds(
+                        TimeUnit.MILLISECONDS.toMinutes(duration)));
+    }
+
+    private void setTimeProgress() {
+        final Handler handler = new Handler();
+        handler.postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                mTextViewTimeProgress.setText(
+                        parseDurationToStringTime(mMediaPlayer.getCurrentPosition()));
+                mTextViewTimeTotal.setText(parseDurationToStringTime(mMediaPlayer.getDuration()));
+                handler.postDelayed(this, 500);
+                mSeekBar.setProgress(mMediaPlayer.getCurrentPosition());
+                setSeekBarPlaySong();
+            }
+        }, 100);
+    }
+
     @Override
     public void onClick(View v) {
         switch (v.getId()) {
+            case R.id.imageButtonBackPlayMusic:
+                //                setVisibleView();
+                break;
             case R.id.imageButtonDownloadPlayMusic:
                 sServicePlaySong.downLoad();
                 break;
@@ -129,17 +225,77 @@ public class PlaySongFragment extends Fragment implements View.OnClickListener {
             case R.id.imageButtonPausePlayMusic:
                 handleButtonPauseMusic();
                 break;
+            case R.id.imageButtonRandomPlayMusic:
+                setButtonRandom();
+                break;
+            case R.id.imageButtonRepeatPlayMusic:
+                break;
             case R.id.imageButtonNextPlayMusic:
                 handleButtonNextMusic();
                 break;
+            case R.id.imageButtonNextPlayMusicMini:
+                handleButtonNextMusicMini();
+                break;
+            case R.id.imageButtonPausePlayMusicMini:
+                handleButtonPauseMusicMini();
+                break;
+            case R.id.imageButtonPreviousPlayMusicMini:
+                handleButtonPreviousMusicMini();
+                break;
+        }
+    }
+
+    private void handleButtonPreviousMusicMini() {
+        sServicePlaySong.previousSong();
+        mImageButtonPause.setImageResource(R.drawable.icon_pause);
+        mImageButtonPauseMini.setImageResource(R.drawable.icon_pause);
+        handlePreviousMusic();
+        setUIPlaySongMini();
+        setUIPlaySong();
+    }
+
+    private void handleButtonPauseMusicMini() {
+        if (sServicePlaySong.checkPlaySong()) {
+            mImageButtonPause.setImageResource(R.drawable.icon_play);
+            mImageButtonPauseMini.setImageResource(R.drawable.icon_play);
+        } else {
+            mImageButtonPause.setImageResource(R.drawable.icon_pause);
+            mImageButtonPauseMini.setImageResource(R.drawable.icon_pause);
+        }
+    }
+
+    private void handleButtonNextMusicMini() {
+        sServicePlaySong.nextSong();
+        mImageButtonPauseMini.setImageResource(R.drawable.icon_pause);
+        mImageButtonPause.setImageResource(R.drawable.icon_pause);
+        handleNextMusic();
+        setUIPlaySong();
+        setUIPlaySongMini();
+    }
+
+    private void setButtonRandom() {
+        if (mIsShuffle == NON_SHUFFLE) {
+            mIsShuffle = SHUFFLE;
+            mImageButtonRandom.setImageResource(R.drawable.icon_random_clicked);
+        } else {
+            mIsShuffle = NON_SHUFFLE;
+            mImageButtonRandom.setImageResource(R.drawable.icon_random);
+        }
+    }
+
+    private void handlerRandomleMusic() {
+        if (mIsShuffle == SHUFFLE) {
+            mPosition = mRandom.nextInt((mSongs.size() - ONE) + ONE);
         }
     }
 
     private void handleButtonNextMusic() {
         mImageButtonPause.setImageResource(R.drawable.icon_pause);
+        mImageButtonPauseMini.setImageResource(R.drawable.icon_pause);
         sServicePlaySong.nextSong();
         handleNextMusic();
         setUIPlaySong();
+        setUIPlaySongMini();
     }
 
     private void handleNextMusic() {
@@ -148,13 +304,16 @@ public class PlaySongFragment extends Fragment implements View.OnClickListener {
         } else {
             mPosition++;
         }
+        handlerRandomleMusic();
     }
 
     private void handleButtonPreviousMusic() {
         mImageButtonPause.setImageResource(R.drawable.icon_pause);
+        mImageButtonPauseMini.setImageResource(R.drawable.icon_pause);
         sServicePlaySong.previousSong();
         handlePreviousMusic();
         setUIPlaySong();
+        setUIPlaySongMini();
     }
 
     private void handlePreviousMusic() {
@@ -163,13 +322,25 @@ public class PlaySongFragment extends Fragment implements View.OnClickListener {
         } else {
             mPosition--;
         }
+        handlerRandomleMusic();
     }
 
     private void handleButtonPauseMusic() {
         if (sServicePlaySong.checkPlaySong()) {
             mImageButtonPause.setImageResource(R.drawable.icon_play);
+            mImageButtonPauseMini.setImageResource(R.drawable.icon_play);
         } else {
             mImageButtonPause.setImageResource(R.drawable.icon_pause);
+            mImageButtonPauseMini.setImageResource(R.drawable.icon_pause);
+        }
+    }
+
+    @Override
+    public void onCompletion(MediaPlayer mp) {
+        switch (mIsShuffle) {
+            case SHUFFLE:
+                mPosition = mRandom.nextInt((mSongs.size() - ONE) + ONE);
+                break;
         }
     }
 }
