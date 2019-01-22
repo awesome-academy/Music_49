@@ -21,8 +21,11 @@ import com.framgia.music_49.data.model.Song;
 import com.framgia.music_49.data.repository.SongRepository;
 import com.framgia.music_49.data.source.local.SongLocal;
 import com.framgia.music_49.data.source.remote.SongRemoteDataSource;
+import com.framgia.music_49.screen.playsong.PlaySongFragment;
 import com.framgia.music_49.utils.ItemClickListener;
+import com.framgia.music_49.utils.Navigator;
 import com.framgia_music_49.R;
+import java.util.ArrayList;
 import java.util.List;
 
 public class LibraryFragment extends Fragment implements ItemClickListener, LibraryContract.View {
@@ -32,6 +35,8 @@ public class LibraryFragment extends Fragment implements ItemClickListener, Libr
     public static final String PERMISSION_IS_NECESSARY = "PERMISSION IS NECESSARY";
 
     private LibraryAdapter mLibraryAdapter;
+    private List<Song> mSongs;
+    private Navigator mNavigator;
 
     public static LibraryFragment newInstance() {
         return new LibraryFragment();
@@ -50,6 +55,8 @@ public class LibraryFragment extends Fragment implements ItemClickListener, Libr
     }
 
     private void initView(View view) {
+        mSongs = new ArrayList<>();
+        mNavigator = new Navigator();
         RecyclerView recyclerViewLibrary = view.findViewById(R.id.recyclerViewLibrary);
         mLibraryAdapter = new LibraryAdapter(this);
         mLibraryAdapter.setItemClickListener(this);
@@ -107,12 +114,20 @@ public class LibraryFragment extends Fragment implements ItemClickListener, Libr
 
     @Override
     public void onItemClicked(int position) {
+        moveFragmentPlaySong(position);
+    }
+
+    private void moveFragmentPlaySong(int position) {
+        PlaySongFragment playSongFragment =
+                PlaySongFragment.newInstance(position, (ArrayList<Song>) mSongs);
+        mNavigator.addFragment(getActivity(), playSongFragment, R.id.frameContainer);
     }
 
     @Override
     public void onSuccessGetDataLocal(List<Song> songList) {
         assert songList != null;
         mLibraryAdapter.updateData(songList);
+        mSongs.addAll(songList);
     }
 
     @Override
