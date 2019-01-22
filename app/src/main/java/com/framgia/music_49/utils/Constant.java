@@ -3,6 +3,7 @@ package com.framgia.music_49.utils;
 import com.framgia_music_49.BuildConfig;
 
 public class Constant {
+    public static final int ONE = 1;
     public static final String KEY = BuildConfig.API_KEY;
     public static final String CLIENT_ID = "?client_id=" + KEY;
     public static final String HTTP = "https://api.soundcloud.com/tracks";
