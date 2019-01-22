@@ -13,5 +13,7 @@
     <string name="offline_trending">Offline Trending</string>
     <string name="name_song">Name Song</string>
     <string name="name_artics">Name Artics</string>
+    <string name="down_load">Downloading</string>
+    <string name="link_error">Link Error</string>
 
 </resources>
