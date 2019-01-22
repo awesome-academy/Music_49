@@ -42,7 +42,7 @@
         app:layout_constraintTop_toBottomOf="@+id/textViewNameSongPlayMusic"
         />
     <ImageButton
-        android:id="@+id/ImageButtonDownloadPlayMusic"
+        android:id="@+id/imageButtonDownloadPlayMusic"
         android:layout_width="@dimen/dp_50"
         android:layout_height="@dimen/dp_50"
         android:layout_margin="@dimen/dp_30"
@@ -92,17 +92,17 @@
         app:layout_constraintTop_toTopOf="@+id/seekbarPlaySong"
         />
     <ImageButton
-        android:id="@+id/ImageButtonRandomPlayMusic"
+        android:id="@+id/imageButtonRandomPlayMusic"
         android:layout_width="@dimen/dp_50"
         android:layout_height="@dimen/dp_50"
         android:layout_marginEnd="@dimen/dp_30"
         android:background="@color/bg_color"
         android:src="@drawable/icon_random"
-        app:layout_constraintRight_toLeftOf="@id/ImageButtonPreviousPlayMusic"
+        app:layout_constraintRight_toLeftOf="@id/imageButtonPreviousPlayMusic"
         app:layout_constraintTop_toTopOf="@+id/imageButtonPausePlayMusic"
         />
     <ImageButton
-        android:id="@+id/ImageButtonPreviousPlayMusic"
+        android:id="@+id/imageButtonPreviousPlayMusic"
         android:layout_width="@dimen/dp_50"
         android:layout_height="@dimen/dp_50"
         android:layout_marginEnd="@dimen/dp_30"
@@ -122,7 +122,7 @@
         app:layout_constraintRight_toRightOf="parent"
         />
     <ImageButton
-        android:id="@+id/ImageButtonNextPlayMusic"
+        android:id="@+id/imageButtonNextPlayMusic"
         android:layout_width="@dimen/dp_50"
         android:layout_height="@dimen/dp_50"
         android:layout_marginStart="@dimen/dp_30"
@@ -131,13 +131,13 @@
         app:layout_constraintTop_toTopOf="@+id/imageButtonPausePlayMusic"
         />
     <ImageButton
-        android:id="@+id/ImageButtonRepeatPlayMusic"
+        android:id="@+id/imageButtonRepeatPlayMusic"
         android:layout_width="@dimen/dp_50"
         android:layout_height="@dimen/dp_50"
         android:layout_marginStart="@dimen/dp_30"
         android:background="@color/bg_color"
         android:src="@drawable/icon_repeat"
-        app:layout_constraintLeft_toRightOf="@+id/ImageButtonNextPlayMusic"
+        app:layout_constraintLeft_toRightOf="@+id/imageButtonNextPlayMusic"
         app:layout_constraintTop_toTopOf="@+id/imageButtonPausePlayMusic"
         />
 

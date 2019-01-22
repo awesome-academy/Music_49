@@ -10,7 +10,7 @@
         android:title="@string/audio"/>
     <item
         android:id="@+id/navigationSearch"
-        android:icon="@drawable/home"
+        android:icon="@drawable/search"
         android:title="@string/search"/>
     <item
         android:id="@+id/navigationLibrary"

@@ -1,6 +1,9 @@
 package com.framgia.music_49.data.model;
 
-public class Song {
+import android.os.Parcel;
+import android.os.Parcelable;
+
+public class Song implements Parcelable {
     private String mNameSong;
     private String mNameArtist;
     private String mImageSong;
@@ -65,14 +68,17 @@ public class Song {
         mDownloadLink = downloadLink;
     }
 
+    @Override
+    public int describeContents() {
+        return 0;
+    }
+
+    @Override
+    public void writeToParcel(Parcel dest, int flags) {
+
+    }
+
     public static class Builder {
-
-        public Builder() {
-        }
-
-        public Song build() {
-            return new Song(this);
-        }
 
         private String mNameSong;
         private String mNameArtist;
@@ -80,6 +86,12 @@ public class Song {
         private String mLink;
         private String mDuration;
         private String mDownloadLink;
+        public Builder() {
+        }
+
+        public Song build() {
+            return new Song(this);
+        }
 
         public Builder setNameSong(String nameSong) {
             mNameSong = nameSong;
